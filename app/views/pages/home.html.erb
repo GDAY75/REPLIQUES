@@ -1,2 +1,23 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
+<div class="repliques-home" data-controller="replique">
+  <h1>Répliques</h1>
+  <p>Certaines phrases ne s’inventent pas.
+  Elles se vivent.</p>
+  <div class="replique-form">
+    <input
+      type="text"
+      placeholder="Écris ta phrase…"
+      data-replique-target="input"
+      class="replique-input"
+    >
+
+    <button
+      type="button"
+      data-action="click->replique#show"
+      class="replique-button"
+    >
+      Faire apparaître la phrase
+    </button>
+  </div>
+
+  <div class="replique-output" data-replique-target="output" aria-live="polite"></div>
+</div>

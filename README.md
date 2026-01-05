@@ -1,1 +1,5 @@
-Rails app generated with [lewagon/rails-templates](https://github.com/lewagon/rails-templates), created by the [Le Wagon coding bootcamp](https://www.lewagon.com) team.
+Écran 1 : phrase d’accueil
+
+Écran 2 : phrase affichée
+
+Écran 3 : (vide pour l’instant)
