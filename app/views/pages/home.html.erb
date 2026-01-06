@@ -1,8 +1,12 @@
-<div class="repliques-home" data-controller="replique">
+<div
+  class="repliques-home"
+  data-controller="replique"
+  data-replique-target="container"
+>
   <h1>Répliques</h1>
   <p>Certaines phrases ne s’inventent pas.
   Elles se vivent.</p>
-  <div class="replique-form">
+  <div class="replique-form" data-replique-target="form">
     <input
       type="text"
       placeholder="Écris ta phrase…"
@@ -19,5 +23,9 @@
     </button>
   </div>
 
-  <div class="replique-output" data-replique-target="output" aria-live="polite"></div>
+  <div
+    class="replique-output"
+    data-replique-target="output"
+    data-action="click->replique#reset"
+  ></div>
 </div>

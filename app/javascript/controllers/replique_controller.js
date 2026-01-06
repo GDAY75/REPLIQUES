@@ -1,16 +1,33 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["input", "output"]
+  static targets = ["input", "output", "form", "container"]
 
   show() {
     const text = this.inputTarget.value.trim()
-    this.outputTarget.textContent = text.length ? text : "…"
+    if (!text) return
+
+    this.outputTarget.textContent = text
+
+    // Mode plein écran
+    this.containerTarget.classList.add("fullscreen")
+    this.formTarget.classList.add("hidden")
+  }
+
+  reset() {
+    this.containerTarget.classList.remove("fullscreen")
+    this.formTarget.classList.remove("hidden")
+    this.outputTarget.textContent = ""
+    this.inputTarget.focus()
   }
 
   connect() {
-    this.inputTarget.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") this.show()
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") this.reset()
+      if (e.key === "Enter" && document.activeElement === this.inputTarget) {
+        this.show()
+      }
     })
   }
 }
+
