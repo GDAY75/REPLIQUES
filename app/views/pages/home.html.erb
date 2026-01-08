@@ -2,6 +2,7 @@
   class="repliques-home"
   data-controller="replique"
   data-replique-target="container"
+  data-replique-delay-value="1200"
 >
   <h1>Répliques</h1>
   <p>Certaines phrases ne s’inventent pas.
@@ -17,15 +18,21 @@
     <button
       type="button"
       data-action="click->replique#show"
+      data-replique-target="button"
       class="replique-button"
     >
       Faire apparaître la phrase
     </button>
   </div>
 
+  <div class="replique-wait" data-replique-target="wait" aria-hidden="true">
+    …
+  </div>
+
   <div
     class="replique-output"
     data-replique-target="output"
     data-action="click->replique#reset"
+    aria-live="polite"
   ></div>
 </div>
