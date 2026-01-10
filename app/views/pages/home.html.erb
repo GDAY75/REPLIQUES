@@ -17,7 +17,7 @@
 
     <button
       type="button"
-      data-action="click->replique#show"
+      data-action="click->replique#askEmotion"
       data-replique-target="button"
       class="replique-button"
     >
@@ -25,10 +25,35 @@
     </button>
   </div>
 
-  <div class="replique-wait" data-replique-target="wait" aria-hidden="true">
-    …
+  <!-- ÉTAPE QUESTION -->
+  <div class="replique-question" data-replique-target="question" aria-hidden="true">
+    <div class="replique-question-card" role="dialog" aria-modal="true">
+      <p class="replique-question-title">
+        Que ressens-tu en lisant cette phrase ?
+      </p>
+
+      <p class="replique-question-quote" data-replique-target="questionQuote">
+        “”
+      </p>
+
+      <div class="replique-question-actions">
+        <button type="button" data-action="click->replique#chooseEmotion" data-emotion="Espoir">
+          Espoir
+        </button>
+        <button type="button" data-action="click->replique#chooseEmotion" data-emotion="Amour">
+          Amour
+        </button>
+        <button type="button" data-action="click->replique#chooseEmotion" data-emotion="Solitude">
+          Solitude
+        </button>
+      </div>
+    </div>
   </div>
 
+  <!-- Délai / attente -->
+  <div class="replique-wait" data-replique-target="wait" aria-hidden="true">…</div>
+
+  <!-- Phrase plein écran -->
   <div
     class="replique-output"
     data-replique-target="output"
