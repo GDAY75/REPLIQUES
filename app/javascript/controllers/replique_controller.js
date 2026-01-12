@@ -1,16 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = [
-    "input",
-    "output",
-    "form",
-    "container",
-    "button",
-    "wait",
-    "question",
-    "questionQuote" // 👈 nouveau
-  ]
+  static targets = ["input", "output", "context", "form", "container", "button", "wait", "question", "questionQuote"]
 
   static values = { delay: Number }
 
@@ -18,6 +9,8 @@ export default class extends Controller {
     this._timer = null
     this._pendingText = null
     this._emotion = null
+    this._contextTimer = null
+
 
     this._onKeydown = (e) => {
       if (e.key === "Escape") this.reset()
@@ -29,6 +22,7 @@ export default class extends Controller {
   disconnect() {
     document.removeEventListener("keydown", this._onKeydown)
     if (this._timer) clearTimeout(this._timer)
+    if (this._contextTimer) clearTimeout(this._contextTimer)
   }
 
   // Étape 1 : on demande l’émotion
@@ -81,6 +75,15 @@ export default class extends Controller {
 
       this.containerTarget.classList.remove("is-waiting")
       this.containerTarget.classList.add("reveal")
+      // Contexte 3 secondes après l’apparition de la phrase
+      this.contextTarget.textContent = ""
+      this.contextTarget.classList.remove("visible")
+
+      this._contextTimer = setTimeout(() => {
+        const context = this.pickContext()
+        this.contextTarget.textContent = context
+        this.contextTarget.classList.add("visible")
+      }, 3000)
     }, delay)
   }
 
@@ -102,5 +105,41 @@ export default class extends Controller {
     this.outputTarget.textContent = ""
     this.buttonTarget.disabled = false
     this.inputTarget.focus()
+
+    if (this._contextTimer) clearTimeout(this._contextTimer)
+    this._contextTimer = null
+
+    this.contextTarget.textContent = ""
+    this.contextTarget.classList.remove("visible")
+
+  }
+
+  pickContext() {
+    const common = [
+      "Cette phrase pourrait être murmurée dans le noir.",
+      "Cette phrase ressemble à un adieu doux.",
+      "Cette phrase pourrait apparaître au bord des larmes.",
+      "Cette phrase sonne comme une promesse fragile.",
+      "Cette phrase pourrait être dite à voix basse, juste avant de partir.",
+      "Cette phrase a le goût d’un souvenir qui revient.",
+    ]
+
+    const byEmotion = {
+      Espoir: [
+        "Cette phrase pourrait être dite au matin, quand tout redevient possible.",
+        "Cette phrase sonne comme une lueur dans l'obscurité.",
+      ],
+      Amour: [
+        "Cette phrase pourrait être murmurée tout près, sans témoin.",
+        "Cette phrase ressemble à une carresse.",
+      ],
+      Solitude: [
+        "Cette phrase pourrait résoner dans une pièce vide.",
+        "Cette phrase ressemble à un message jamais envoyé.",
+      ],
+    }
+
+    const pool = (byEmotion[this._emotion] || []).concat(common)
+    return pool[Math.floor(Math.random() * pool.length)]
   }
 }

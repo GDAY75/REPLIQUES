@@ -155,3 +155,37 @@
   line-height: 1.4;
 }
 
+.replique-context {
+  position: fixed;
+  top: 58%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 92vw;
+  max-width: 900px;
+
+  text-align: center;
+  opacity: 0;
+  filter: blur(6px);
+  transform: translate(-50%, 10px);
+
+  color: rgba(245, 245, 245, 0.78);
+  font-style: italic;
+  line-height: 1.35;
+
+  /* SassC-friendly (pas de clamp) */
+  font-size: 18px;
+}
+
+@media (min-width: 1200px) {
+  .replique-context { font-size: 22px; }
+}
+
+.repliques-home.fullscreen.reveal .replique-context.visible {
+  animation: contextReveal 1200ms cubic-bezier(.12,.85,.12,1) forwards;
+}
+
+@keyframes contextReveal {
+  0%   { opacity: 0; filter: blur(6px); transform: translate(-50%, 10px); }
+  100% { opacity: 1; filter: blur(0px); transform: translate(-50%, 0px); }
+}
+
