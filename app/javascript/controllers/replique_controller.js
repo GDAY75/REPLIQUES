@@ -1,15 +1,16 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["input", "output", "context", "form", "container", "button", "wait", "question", "questionQuote"]
+  static targets = ["input", "form", "container", "button", "wait", "question", "questionQuote", "video", "context"]
 
   static values = { delay: Number }
 
   connect() {
     this._timer = null
+    this._contextTimer = null
     this._pendingText = null
     this._emotion = null
-    this._contextTimer = null
+
 
 
     this._onKeydown = (e) => {
@@ -62,7 +63,6 @@ export default class extends Controller {
     // (optionnel) si tu veux afficher l’émotion ailleurs plus tard :
     // console.log("Emotion choisie:", this._emotion)
 
-    this.outputTarget.textContent = ""
     this.containerTarget.classList.add("fullscreen", "is-waiting")
     this.formTarget.classList.add("hidden")
     this.buttonTarget.disabled = true
@@ -71,11 +71,20 @@ export default class extends Controller {
     const delay = Number.isFinite(this.delayValue) ? this.delayValue : 1200
     this._timer = setTimeout(() => {
       this.waitTarget.classList.remove("visible")
-      this.outputTarget.textContent = text
 
       this.containerTarget.classList.remove("is-waiting")
       this.containerTarget.classList.add("reveal")
-      // Contexte 3 secondes après l’apparition de la phrase
+
+      // démarre la vidéo
+      try {
+        this.videoTarget.currentTime = 0
+        this.videoTarget.muted = false
+        this.videoTarget.volume = 1
+        const p = this.videoTarget.play()
+        if (p && typeof p.catch === "function") p.catch((err) => console.warn(err))
+      } catch (_) {}
+
+      // Contexte 3 secondes après
       this.contextTarget.textContent = ""
       this.contextTarget.classList.remove("visible")
 
@@ -89,7 +98,16 @@ export default class extends Controller {
 
   reset() {
     if (this._timer) clearTimeout(this._timer)
+    if (this._contextTimer) clearTimeout(this._contextTimer)
     this._timer = null
+    this._contextTimer = null
+
+    // stop vidéo
+    if (this.hasVideoTarget) {
+      this.videoTarget.pause()
+      this.videoTarget.currentTime = 0
+    }
+
 
     this._pendingText = null
     this._emotion = null
@@ -102,12 +120,8 @@ export default class extends Controller {
     this.questionTarget.classList.remove("visible")
     this.questionTarget.setAttribute("aria-hidden", "true")
 
-    this.outputTarget.textContent = ""
     this.buttonTarget.disabled = false
     this.inputTarget.focus()
-
-    if (this._contextTimer) clearTimeout(this._contextTimer)
-    this._contextTimer = null
 
     this.contextTarget.textContent = ""
     this.contextTarget.classList.remove("visible")

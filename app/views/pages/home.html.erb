@@ -53,18 +53,16 @@
   <!-- Délai / attente -->
   <div class="replique-wait" data-replique-target="wait" aria-hidden="true">…</div>
 
-  <!-- Phrase plein écran -->
-  <div
-    class="replique-output"
-    data-replique-target="output"
+  <video
+    class="replique-video"
+    data-replique-target="video"
     data-action="click->replique#reset"
-    aria-live="polite"
-  ></div>
+    playsinline
+    preload="auto"
+  >
+    <source src="<%= asset_path('espoir.mp4') %>" type="video/mp4">
+  </video>
 
-  <div
-    class="replique-context"
-    data-replique-target="context"
-    aria-live="polite"
-  ></div>
+  <div class="replique-context" data-replique-target="context" aria-live="polite"></div>
 
 </div>

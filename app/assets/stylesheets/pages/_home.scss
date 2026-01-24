@@ -189,3 +189,23 @@
   100% { opacity: 1; filter: blur(0px); transform: translate(-50%, 0px); }
 }
 
+.replique-video {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;   // "plein écran" sans bandes noires (crop possible)
+  opacity: 0;
+  filter: blur(8px);
+  transform: scale(1.02);
+  pointer-events: none;
+}
+
+.repliques-home.fullscreen.reveal .replique-video {
+  animation: videoReveal 1800ms cubic-bezier(.12,.85,.12,1) forwards;
+}
+
+@keyframes videoReveal {
+  0%   { opacity: 0; filter: blur(10px); transform: scale(1.03); }
+  100% { opacity: 1; filter: blur(0px);  transform: scale(1); }
+}
