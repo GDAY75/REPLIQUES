@@ -80,19 +80,24 @@ export default class extends Controller {
         this.videoTarget.currentTime = 0
         this.videoTarget.muted = false
         this.videoTarget.volume = 1
+
+        // Nettoie ancien listener s'il existe
+        this.videoTarget.onended = null
+
         const p = this.videoTarget.play()
-        if (p && typeof p.catch === "function") p.catch((err) => console.warn(err))
+        if (p && typeof p.catch === "function") p.catch(() => {})
+
+        // Quand la vidéo se termine
+        this.videoTarget.onended = () => {
+          // contexte 3 secondes APRÈS la fin
+          this._contextTimer = setTimeout(() => {
+            const context = this.pickContext()
+            this.contextTarget.textContent = context
+            this.contextTarget.classList.add("visible")
+          }, 3000)
+        }
+
       } catch (_) {}
-
-      // Contexte 3 secondes après
-      this.contextTarget.textContent = ""
-      this.contextTarget.classList.remove("visible")
-
-      this._contextTimer = setTimeout(() => {
-        const context = this.pickContext()
-        this.contextTarget.textContent = context
-        this.contextTarget.classList.add("visible")
-      }, 3000)
     }, delay)
   }
 
@@ -106,7 +111,9 @@ export default class extends Controller {
     if (this.hasVideoTarget) {
       this.videoTarget.pause()
       this.videoTarget.currentTime = 0
+      this.videoTarget.onended = null
     }
+
 
 
     this._pendingText = null
